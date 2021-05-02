@@ -397,40 +397,143 @@ class CircularList:
 
     def reverse(self) -> None:
         """
-        TODO: Write this implementation
+        A function that reverses the order of the nodes in the list. All work
+        must be done “in place” without creating any new nodes. You are not
+        allowed to change the values of the nodes; the solution must change node
+        pointers. Your solution must have O(N) runtime complexity.
         """
+
+        previous = self.sentinel
+        current = self.sentinel.next
+
+        while current is not self.sentinel:
+            following = current.next
+            current.next = current.prev
+            previous = current
+            current = following
+
         pass
 
     def sort(self) -> None:
         """
-        TODO: Write this implementation
+        A function that sorts the content of the list in non-descending order. All
+        work must be done “in place” without creating any new nodes. You are not
+        allowed to change the values of the nodes; the solution must change node
+        pointers. You can implement any sort method of your choice. Sorting does not
+        have to be very efficient or fast; a simple insertion or bubble sort will
+        suffice. However, runtime complexity of your implementation cannot be worse
+        than O(N^2). Duplicates in the list can be placed in any relative order in
+        the sorted list (in other words, your sort does not have to be ‘stable’).
+        For this method, you may assume that elements stored in the linked list are all
+        of the same type (either all numbers, or strings, or custom objects, but never
+        a mix of these).
         """
         pass
 
     def rotate(self, steps: int) -> None:
         """
-        TODO: Write this implementation
+        A function that‘rotates’ the linked list by shifting the position of its elements
+        right or left steps number of times. If steps is a positive integer, elements should
+        be rotated right. Otherwise, the elements should be rotated left. All work must be
+        done “in place” without creating any new nodes. You are not allowed to change the
+        values of the nodes; the solution must change node pointers. Please note that the
+        value of the steps parameter can be very large (from -109 to 109). The solution’s
+        runtime complexity must be O(N), where N is the length of the list.
+
         """
         pass
 
     def remove_duplicates(self) -> None:
         """
-        TODO: Write this implementation
+        A function that deletes all nodes that have duplicate values from a sorted linked list,
+        leaving only nodes with distinct values. All work must be done “in place” without creating
+        any new nodes. You are not allowed to change the values of the nodes; the solution must
+        change node pointers. Your solution must have O(N) runtime complexity. You may assume that
+        the list is sorted.
         """
-        pass
+
+        curr = self.sentinel.next
+        val = curr.prev.value
+
+        while curr is not self.sentinel:
+
+            # val doesn't equal current value, update val to next value to compare
+            # duplicates for that value
+            if val != curr.value:
+                val = curr.value
+                curr = curr.next
+
+            # matching value found, use remove method to remove value
+            if val == curr.value:
+                self.remove(val)
+
+                # curr next value is not a duplicate, remove comparison val
+                # and update val to next value
+                if val != curr.next.value:
+                    self.remove(val)
+                curr = curr.next
 
     def odd_even(self) -> None:
         """
-        TODO: Write this implementation
+        A function that regroups list nodes by first grouping all ODD nodes together followed
+        by all EVEN nodes (here, “odd” and “even” refer to the node position in the list
+        (starting from 1), not the node values). All work must be done “in place” without
+        creating any new nodes. You are not allowed to change the values of the nodes; the
+        solution must change node pointers. Your solution must have O(N) runtime complexity.
         """
         pass
 
     def add_integer(self, num: int) -> None:
+        """Assume the content of the linked list represents a non-negative integer such that each
+        digit is stored in a separate node. This method will receive another non-negative integer
+        num, add it to the number already stored in the linked list, and then store the result of
+        the addition back into the list nodes, one digit per node. This addition must be done “in place”,
+        by changing the values of the existing nodes to the extent that is possible. However, since the
+        result of the addition may have more digits than nodes in the original linked list, you may need
+        to add some new nodes. However, you should only add the minimum number of nodes necessary and not
+        recreate the entire linked list.
         """
-        TODO: Write this implementation
-        """
-        pass
 
+        # invalid num input
+        if num < 0:
+            raise CDLLException
+
+        # convert CDLL to integer
+        length = self.length()
+        factor = self.length() - 1
+        curr = self.sentinel.next
+        CDLL_integer = 0
+
+        for node in range(0, length):
+            val = curr.value
+            CDLL_integer += val*(10**factor)
+            factor -= 1
+
+        # find the sum of the two integers
+        total = CDLL_integer + integer
+
+        # finding total amount of nodes needed
+        total_copy = total
+        factor = 0
+        while total_copy >= 10:
+            total_copy = total_copy/10
+            factor += 1
+
+        # changing values
+        curr = self.sentinel.next
+        for pos in range(0, length):
+            val = total // (10 ** factor)
+            total -= val*(10**factor)
+            factor -= 1
+            curr.value = val
+            curr = curr.next
+
+        # if there is remaining total, add new nodes until total = 0
+        while total != 0:
+            add_val = total//(10 ** factor)
+            total -= add_val*(10**factor)
+            factor -= 1
+            self.add_back(add_val)
 
 if __name__ == '__main__':
     pass
@@ -543,16 +646,16 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    print('\n# reverse example 1')
-    test_cases = (
-        [1, 2, 3, 3, 4, 5],
-        [1, 2, 3, 4, 5],
-        ['A', 'B', 'C', 'D']
-    )
-    for case in test_cases:
-        lst = CircularList(case)
-        lst.reverse()
-        print(lst)
+    # print('\n# reverse example 1')
+    # test_cases = (
+    #     [1, 2, 3, 3, 4, 5],
+    #     [1, 2, 3, 4, 5],
+    #     ['A', 'B', 'C', 'D']
+    # )
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     lst.reverse()
+    #     print(lst)
     #
     # print('\n# reverse example 2')
     # lst = CircularList()
@@ -651,15 +754,15 @@ if __name__ == '__main__':
     #     lst.odd_even()
     #     print('OUTPUT:', lst)
 
-    # print('\n# add_integer example 1')
-    # test_cases = (
-    #   ([1, 2, 3], 10456),
-    #   ([], 25),
-    #   ([2, 0, 9, 0, 7], 108),
-    #    ([9, 9, 9], 9_999_999),
-    #
-    # for list_content, integer in test_cases:
-    #    lst = CircularList(list_content)
-    # print('INPUT :', lst, 'INTEGER', integer)
-    # lst.add_integer(integer)
-    # print('OUTPUT:', lst)
+    print('\n# add_integer example 1')
+    test_cases = (
+      ([1, 2, 3], 10456),
+      ([], 25),
+      ([2, 0, 9, 0, 7], 108),
+       ([9, 9, 9], 9_999_999)
+    )
+    for list_content, integer in test_cases:
+       lst = CircularList(list_content)
+    print('INPUT :', lst, 'INTEGER', integer)
+    lst.add_integer(integer)
+    print('OUTPUT:', lst)
