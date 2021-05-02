@@ -523,23 +523,22 @@ class CircularList:
         # changing values
         curr = self.sentinel.next
         beginning_factor = factor
-        start = 0
 
-        # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
-        # total would use less nodes than originally given
-        for zero in range(start, length):
+        for pos in range(0, length):
+
+            # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
+            # total would use less nodes than originally given
             if beginning_factor < length - 1:
                 curr.val = 0
                 beginning_factor += 1
-                start += 1
                 curr = curr.next
 
-        for pos in range(start, length):
-            val = total // (10 ** factor)
-            total -= val*(10**factor)
-            factor -= 1
-            curr.value = val
-            curr = curr.next
+            else:
+                val = total // (10 ** factor)
+                total -= val*(10**factor)
+                factor -= 1
+                curr.value = val
+                curr = curr.next
 
         # if there is a remaining total, factor will not be -1
         while factor != -1:
