@@ -403,16 +403,19 @@ class CircularList:
         pointers. Your solution must have O(N) runtime complexity.
         """
 
-        previous = self.sentinel
-        current = self.sentinel.next
+        midway = self.length()//2
+        count = midway
 
-        while current is not self.sentinel:
-            following = current.next
-            current.next = current.prev
-            previous = current
-            current = following
+        # assigning index 1 and index 2 to use with swap_pairs method
+        index_1 = 0
+        index_2 = self.length() - 1
 
-        pass
+        # swapping the first half of the list with its mirror image on the second half of the list
+        while count != -1 and self.length() > 1:
+            self.swap_pairs(index_1, index_2)
+            index_1 += 1
+            index_2 -= 1
+            count -= 1
 
     def sort(self) -> None:
         """
@@ -439,9 +442,11 @@ class CircularList:
         values of the nodes; the solution must change node pointers. Please note that the
         value of the steps parameter can be very large (from -109 to 109). The solution’s
         runtime complexity must be O(N), where N is the length of the list.
-
         """
+
         pass
+
+
 
     def remove_duplicates(self) -> None:
         """
@@ -494,7 +499,6 @@ class CircularList:
         recreate the entire linked list.
         """
 
-
         # invalid num input
         if num < 0:
             raise CDLLException
@@ -524,31 +528,30 @@ class CircularList:
         # changing values
         curr = self.sentinel.next
         beginning_factor = factor
+        start = 0
 
-        while factor != -1:
-
-            # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
-            # total would use less nodes than originally given
+        # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
+        # total would use less nodes than originally given
+        for zero in range(start, length):
             if beginning_factor < length - 1:
                 curr.val = 0
                 beginning_factor += 1
+                start += 1
                 curr = curr.next
 
-            else:
-                if curr.value is not None:
-                    val = total // (10 ** factor)
-                    total -= val*(10**factor)
-                    factor -= 1
-                    curr.value = val
-                    curr = curr.next
+        for pos in range(start, length):
+            val = total // (10 ** factor)
+            total -= val*(10**factor)
+            factor -= 1
+            curr.value = val
+            curr = curr.next
 
-                else:
-                    # if there is a remaining total, factor will not be -1
-                    add_val = total//(10 ** factor)
-                    total -= add_val*(10**factor)
-                    factor -= 1
-                    self.add_back(add_val)
-
+        # if there is a remaining total, factor will not be -1
+        while factor != -1:
+            add_val = total//(10 ** factor)
+            total -= add_val*(10**factor)
+            factor -= 1
+            self.add_back(add_val)
 
 
 
@@ -685,43 +688,43 @@ if __name__ == '__main__':
     # lst.reverse()
     # print(lst)
     #
-    # print('\n# reverse example 3')
-    #
-    #
-    # class Student:
-    #     def __init__(self, name, age):
-    #         self.name, self.age = name, age
-    #
-    #     def __eq__(self, other):
-    #         return self.age == other.age
-    #
-    #     def __str__(self):
-    #         return str(self.name) + ' ' + str(self.age)
-    #
-    #
-    # s1, s2 = Student('John', 20), Student('Andy', 20)
-    # lst = CircularList([s1, s2])
-    # print(lst)
-    # lst.reverse()
-    # print(lst)
-    # print(s1 == s2)
-    #
-    # print('\n# reverse example 4')
-    # lst = CircularList([1, 'A'])
-    # lst.reverse()
-    # print(lst)
-    #
-    # print('\n# sort example 1')
-    # test_cases = (
-    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
-    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-    #     [(1, 1), (20, 1), (1, 20), (2, 20)]
-    # )
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     print(lst)
-    #     lst.sort()
-    #     print(lst)
+    print('\n# reverse example 3')
+
+
+    class Student:
+        def __init__(self, name, age):
+            self.name, self.age = name, age
+
+        def __eq__(self, other):
+            return self.age == other.age
+
+        def __str__(self):
+            return str(self.name) + ' ' + str(self.age)
+
+
+    s1, s2 = Student('John', 20), Student('Andy', 20)
+    lst = CircularList([s1, s2])
+    print(lst)
+    lst.reverse()
+    print(lst)
+    print(s1 == s2)
+
+    print('\n# reverse example 4')
+    lst = CircularList([1, 'A'])
+    lst.reverse()
+    print(lst)
+
+    print('\n# sort example 1')
+    test_cases = (
+        [1, 10, 2, 20, 3, 30, 4, 40, 5],
+        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+        [(1, 1), (20, 1), (1, 20), (2, 20)]
+    )
+    for case in test_cases:
+        lst = CircularList(case)
+        print(lst)
+        lst.sort()
+        print(lst)
     #
     # print('\n# rotate example 1')
     # source = [_ for _ in range(-20, 20, 7)]
@@ -771,15 +774,15 @@ if __name__ == '__main__':
     #     lst.odd_even()
     #     print('OUTPUT:', lst)
     #
-    print('\n# add_integer example 1')
-    test_cases = (
-        ([1, 2, 3], 10456),
-        ([], 25),
-        ([2, 0, 9, 0, 7], 108),
-        ([9, 9, 9], 9_999_999)
-    )
-    for list_content, integer in test_cases:
-        lst = CircularList(list_content)
-        print('INPUT :', lst, 'INTEGER', integer)
-        lst.add_integer(integer)
-        print('OUTPUT:', lst)
+    # print('\n# add_integer example 1')
+    # test_cases = (
+    #     ([1, 2, 3], 10456),
+    #     ([], 25),
+    #     ([2, 0, 9, 0, 7], 108),
+    #     ([9, 9, 9], 9_999_999)
+    # )
+    # for list_content, integer in test_cases:
+    #     lst = CircularList(list_content)
+    #     print('INPUT :', lst, 'INTEGER', integer)
+    #     lst.add_integer(integer)
+    #     print('OUTPUT:', lst)
