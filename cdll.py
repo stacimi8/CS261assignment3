@@ -330,9 +330,70 @@ class CircularList:
                 index1 > self.length() - 1 or index2 > self.length() - 1:
             raise CDLLException
 
+        length = self.length()
 
+        # finding index1 next and prev
+        curr = self.sentinel.next
+        for index in range(0, length):
 
+            if index == index1:
+                index1_node = curr
+                index1_next = curr.next
+                index1_prev = curr.prev
 
+            if index == index2:
+                index2_node = curr
+                index2_next = curr.next
+                index2_prev = curr.prev
+
+            curr = curr.next
+
+        # change pointers - if indices are next to each other
+        if index2 - index1 == 1:  # index2 is after index1
+
+            # swapping two provided indices and linking them to each other
+            index1_next.next = index2_prev
+            index2_prev.prev = index1_next
+
+            # linking index2 to index1 prev and linking index1 prev back to index2
+            index1_next.prev = index1_prev
+            index1_prev.next = index1_next
+
+            # linking index1 to index2 next and linking index2 next back to index1
+            index2_prev.next = index2_next
+            index2_next.prev = index2_prev
+
+        if index1 - index2 == 1:  # index1 is after index2
+
+            # swapping two provided indices and linking them to each other
+            index2_next.next = index1_prev
+            index1_prev.prev = index2_next
+
+            # linking index1 to index2 prev and linking index2 prev back to index1
+            index2_next.prev = index2_prev
+            index2_prev.next = index2_next
+
+            # linking index2 to index1 next and linking index1 next back to index2
+            index1_prev.next = index1_next
+            index1_next.prev = index1_prev
+
+        # change pointers - if indices are not next to each other
+        if abs(index2 - index1) != 1:
+            # updating index1 next and prev pointers
+            index1_node.next = index2_next
+            index1_node.prev = index2_prev
+
+            # updating index1 next previous and index1 previous next pointers
+            index1_next.prev = index2_node
+            index1_prev.next = index2_node
+
+            # updating index2 next and prev pointers
+            index2_node.next = index1_next
+            index2_node.prev = index1_prev
+
+            # updating index2 next previous and index2 previous next pointers
+            index2_next.prev = index1_node
+            index2_prev.next = index1_node
 
     def reverse(self) -> None:
         """
@@ -465,9 +526,9 @@ if __name__ == '__main__':
     # for value in [7, 3, 3, 3, 3]:
     #     print(lst.remove(value), lst.length(), lst)
     #
-    print('\n# count example 1')
-    lst = CircularList([1, 2, 3, 1, 2, 2])
-    print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
+    # print('\n# count example 1')
+    # lst = CircularList([1, 2, 3, 1, 2, 2])
+    # print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
     # #
     # print('\n# swap_pairs example 1')
     # lst = CircularList([0, 1, 2, 3, 4, 5, 6])
@@ -482,16 +543,16 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    # print('\n# reverse example 1')
-    # test_cases = (
-    #     [1, 2, 3, 3, 4, 5],
-    #     [1, 2, 3, 4, 5],
-    #     ['A', 'B', 'C', 'D']
-    # )
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     lst.reverse()
-    #     print(lst)
+    print('\n# reverse example 1')
+    test_cases = (
+        [1, 2, 3, 3, 4, 5],
+        [1, 2, 3, 4, 5],
+        ['A', 'B', 'C', 'D']
+    )
+    for case in test_cases:
+        lst = CircularList(case)
+        lst.reverse()
+        print(lst)
     #
     # print('\n# reverse example 2')
     # lst = CircularList()
