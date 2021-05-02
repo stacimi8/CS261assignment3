@@ -508,6 +508,7 @@ class CircularList:
             val = curr.value
             CDLL_integer += val*(10**factor)
             factor -= 1
+            curr = curr.next
 
         # find the sum of the two integers
         total = CDLL_integer + num
@@ -753,16 +754,16 @@ if __name__ == '__main__':
     #     print('INPUT :', lst)
     #     lst.odd_even()
     #     print('OUTPUT:', lst)
-
-    print('\n# add_integer example 1')
-    test_cases = (
-      ([1, 2, 3], 10456),
-      ([], 25),
-      ([2, 0, 9, 0, 7], 108),
-       ([9, 9, 9], 9_999_999)
-    )
-    for list_content, integer in test_cases:
-       lst = CircularList(list_content)
-    print('INPUT :', lst, 'INTEGER', integer)
-    lst.add_integer(integer)
-    print('OUTPUT:', lst)
+    #
+    # print('\n# add_integer example 1')
+    # test_cases = (
+    #   ([1, 2, 3], 10456),
+    #   ([], 25),
+    #   ([2, 0, 9, 0, 7], 108),
+    #    ([9, 9, 9], 9_999_999),
+    # )
+    # for list_content, integer in test_cases:
+    #    lst = CircularList(list_content)
+    # print('INPUT :', lst, 'INTEGER', integer)
+    # lst.add_integer(integer)
+    # print('OUTPUT:', lst)
