@@ -154,59 +154,42 @@ class CircularList:
             raise CDLLException
 
         new_node = DLNode(value)
+        midway = self.length()//2
 
-        if index <= self.length()/2:
-            self.insert_at_index_first_half_helper(index, new_node, pos=0, curr=self.sentinel)
+        if index <= midway:
+            curr = self.sentinel.next
+            for pos in range(0, midway+1):
+                # index is found at pos
+                if pos == index:
+                    # new node is linked to its next and prev nodes
+                    new_node.next = curr
+                    new_node.prev = curr.prev
 
-        elif index > self.length()/2:
-            pos = self.length()
-            self.insert_at_index_second_half_helper(index, new_node, pos, curr=self.sentinel)
+                    # link curr previous' node to new node
+                    curr.prev = new_node
 
-    def insert_at_index_first_half_helper(self, index, new_node, pos, curr):
-        """
-        A recursive helper for insert_at_index method.  This is specifically
-        for an index placed in the first half of the list - moving clockwise.
-        """
+                    # link new node previous' next node to new node
+                    new_node.prev.next = new_node
+                    return
+                curr = curr.next
 
-        # index is found at pos
-        if pos == index:
+        if index > midway:
+            curr = self.sentinel
+            for pos in range(self.length(), midway, - 1):
+                # index is found at pos
+                if pos == index:
 
-            # new node is linked to its next and prev nodes.
-            new_node.next = curr.next
-            new_node.prev = curr
+                    # new node is linked to its next and prev nodes.
+                    new_node.next = curr
+                    new_node.prev = curr.prev
 
-            # link new node next's prev node to new node
-            new_node.next.prev = new_node
+                    # link new node previous' next node to new node
+                    new_node.prev.next = new_node
 
-            # link current's next node to new node
-            curr.next = new_node
-            return
-
-        # calling method again because index was not found at pos
-        self.insert_at_index_first_half_helper(index, new_node, pos + 1, curr.next)
-
-    def insert_at_index_second_half_helper(self, index, new_node, pos, curr):
-        """
-        A recursive helper for insert_at_index method.  This is specifically for
-        an index placed in the second half of the list - moving counterclockwise.
-        """
-
-        # index is found at pos
-        if pos == index:
-
-            # new node is linked to its next and prev nodes.
-            new_node.next = curr
-            new_node.prev = curr.prev
-
-            # link new node previous' next node to new node
-            new_node.prev.next = new_node
-
-            # link current's prev node to new node
-            curr.prev = new_node
-            return
-
-        # calling method again because index was not found at pos
-        self.insert_at_index_second_half_helper(index, new_node, pos - 1, curr.prev)
+                    # link current's prev node to new node
+                    curr.prev = new_node
+                    return
+                curr = curr.prev
 
     def remove_front(self) -> None:
         """
@@ -245,64 +228,111 @@ class CircularList:
         if 0 > index or index > self.length() - 1:
             raise CDLLException
 
-        if index <= self.length()/2:
-            self.remove_at_index_first_half_helper(index, pos=0, curr=self.sentinel)
+        midway = self.length()//2
 
-        elif index > self.length()/2:
-            pos = self.length() - 1
-            self.remove_at_index_second_half_helper(index, pos, curr=self.sentinel)
+        if index <= midway:
+            curr = self.sentinel.next
+            for pos in range(0, midway + 1):
+                # index is found at pos
+                if pos == index:
+                    curr.next.prev = curr.prev
+                    curr.prev.next = curr.next
+                    return
+                curr = curr.next
 
-    def remove_at_index_first_half_helper(self, index, pos, curr):
-        """A recursive helper for remove_at_index method."""
-
-        # index is found at pos
-        if pos == index:
-            curr.next = curr.next.next
-            curr.next.prev = curr
-            return
-
-        self.remove_at_index_first_half_helper(index, pos + 1, curr.next)
-
-    def remove_at_index_second_half_helper(self, index, pos, curr):
-        """A recursive helper for remove_at_index method."""
-
-        # index is found at pos
-        if pos == index:
-            curr.prev = curr.prev.prev
-            curr.prev.next = curr
-            return
-
-        self.remove_at_index_second_half_helper(index, pos - 1, curr.prev)
+        if index > midway:
+            curr = self.sentinel.prev
+            for pos in range(self.length() - 1, midway, - 1):
+                # index is found at pos
+                if pos == index:
+                    curr.next.prev = curr.prev
+                    curr.prev.next = curr.next
+                    return
+                curr = curr.prev
 
     def get_front(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value from the first node in the list without removing it.
+        If the list is empty, the method raises a custom “CDLLException”.
         """
-        pass
+
+        if self.is_empty():
+            raise CDLLException
+
+        return self.sentinel.next.value
 
     def get_back(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value from the last node in the list without removing it.
+        If the list is empty, the method raises a custom “CDLLException”.
         """
-        pass
+
+        if self.is_empty():
+            raise CDLLException
+
+        return self.sentinel.prev.value
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        A function that traverses the list from the beginning to the end and
+        removes the first node in the list that matches the provided “value”
+        object. The method returns True if some node was actually removed from
+        the list. Otherwise, it returns False.
         """
-        pass
+
+        curr = self.sentinel.next
+
+        # traversing through list from beginning to end
+        for pos in range(0, self.length()):
+
+            # value is found
+            if curr.value == value:
+
+                # remove first node that matches the value
+                self.remove_at_index(pos)
+                return True
+
+            curr = curr.next
+
+        return False
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        A function that counts and returns the number of elements in the list
+        that matches the provided "value" object.
         """
-        pass
+
+        curr = self.sentinel.next
+        count = 0
+
+        for pos in range(0, self.length()):
+            # value is found, add 1 to count
+            if curr.value == value:
+                count += 1
+            curr = curr.next
+
+        return count
 
     def swap_pairs(self, index1: int, index2: int) -> None:
         """
-        TODO: Write this implementation
+        A function that swaps two nodes given their indices. All work must be done
+        “in place” without creating any new nodes. You are not allowed to change the
+        values of the nodes; the solution must change node pointers. Your solution
+        must have O(N) runtime complexity for finding the pointers to the nodes and
+        O(1) for actually swapping them. If either of the provided indices is invalid,
+        the method raises a custom “CDLLException”. If the linked list contains N
+        nodes (not including sentinel nodes in this count), valid indices for this
+        method are [0, N - 1] inclusive.
         """
-        pass
+
+        # invalid index
+        if 0 > index1 or 0 > index2 or \
+                index1 > self.length() - 1 or index2 > self.length() - 1:
+            raise CDLLException
+
+
+
+
 
     def reverse(self) -> None:
         """
@@ -397,17 +427,17 @@ if __name__ == '__main__':
     # lst.remove_back()
     # print(lst)
     #
-    print('\n# remove_at_index example 1')
-    lst = CircularList([1, 2, 3, 4, 5, 6])
-    print(lst)
-    for index in [0, 0, 0, 2, 2, -2]:
-        print('Removed at index:', index, ': ', end='')
-        try:
-            lst.remove_at_index(index)
-            print(lst)
-        except Exception as e:
-            print(type(e))
-    print(lst)
+    # print('\n# remove_at_index example 1')
+    # lst = CircularList([1, 2, 3, 4, 5, 6])
+    # print(lst)
+    # for index in [0, 0, 0, 2, 2, -2]:
+    #     print('Removed at index:', index, ': ', end='')
+    #     try:
+    #         lst.remove_at_index(index)
+    #         print(lst)
+    #     except Exception as e:
+    #         print(type(e))
+    # print(lst)
     #
     # print('\n# get_front example 1')
     # lst = CircularList(['A', 'B'])
@@ -435,10 +465,10 @@ if __name__ == '__main__':
     # for value in [7, 3, 3, 3, 3]:
     #     print(lst.remove(value), lst.length(), lst)
     #
-    # print('\n# count example 1')
-    # lst = CircularList([1, 2, 3, 1, 2, 2])
-    # print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
-    #
+    print('\n# count example 1')
+    lst = CircularList([1, 2, 3, 1, 2, 2])
+    print(lst, lst.count(1), lst.count(2), lst.count(3), lst.count(4))
+    # #
     # print('\n# swap_pairs example 1')
     # lst = CircularList([0, 1, 2, 3, 4, 5, 6])
     # test_cases = ((0, 6), (0, 7), (-1, 6), (1, 5),
