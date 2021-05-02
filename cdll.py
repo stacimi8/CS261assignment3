@@ -502,39 +502,52 @@ class CircularList:
         length = self.length()
         factor = self.length() - 1
         curr = self.sentinel.next
-        CDLL_integer = 0
+        cdll_integer = 0
 
         for node in range(0, length):
             val = curr.value
-            CDLL_integer += val*(10**factor)
+            cdll_integer += val*(10**factor)
             factor -= 1
             curr = curr.next
 
         # find the sum of the two integers
-        total = CDLL_integer + num
+        total = cdll_integer + num
 
         # finding total amount of nodes needed
         total_copy = total
         factor = 0
         while total_copy >= 10:
-            total_copy = total_copy/10
+            total_copy = total_copy//10
             factor += 1
 
         # changing values
         curr = self.sentinel.next
-        for pos in range(0, length):
+        beginning_factor = factor
+        start = 0
+
+        # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
+        # total would use less nodes than originally given
+        for zero in range(start, length):
+            if beginning_factor < length - 1:
+                curr.val = 0
+                beginning_factor += 1
+                start += 1
+                curr = curr.next
+
+        for pos in range(start, length):
             val = total // (10 ** factor)
             total -= val*(10**factor)
             factor -= 1
             curr.value = val
             curr = curr.next
 
-        # if there is remaining total, add new nodes until total = 0
-        while total != 0:
+        # if there is a remaining total, factor will not be -1
+        while factor != -1:
             add_val = total//(10 ** factor)
             total -= add_val*(10**factor)
             factor -= 1
             self.add_back(add_val)
+
 
 if __name__ == '__main__':
     pass
@@ -755,15 +768,15 @@ if __name__ == '__main__':
     #     lst.odd_even()
     #     print('OUTPUT:', lst)
     #
-    # print('\n# add_integer example 1')
-    # test_cases = (
-    #   ([1, 2, 3], 10456),
-    #   ([], 25),
-    #   ([2, 0, 9, 0, 7], 108),
-    #    ([9, 9, 9], 9_999_999),
-    # )
-    # for list_content, integer in test_cases:
-    #    lst = CircularList(list_content)
-    # print('INPUT :', lst, 'INTEGER', integer)
-    # lst.add_integer(integer)
-    # print('OUTPUT:', lst)
+    print('\n# add_integer example 1')
+    test_cases = (
+        ([1, 2, 3], 10456),
+        ([], 25),
+        ([2, 0, 9, 0, 7], 108),
+        ([9, 9, 9], 9_999_999)
+    )
+    for list_content, integer in test_cases:
+        lst = CircularList(list_content)
+        print('INPUT :', lst, 'INTEGER', integer)
+        lst.add_integer(integer)
+        print('OUTPUT:', lst)
