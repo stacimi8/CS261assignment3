@@ -494,6 +494,7 @@ class CircularList:
         recreate the entire linked list.
         """
 
+
         # invalid num input
         if num < 0:
             raise CDLLException
@@ -524,7 +525,7 @@ class CircularList:
         curr = self.sentinel.next
         beginning_factor = factor
 
-        for pos in range(0, length):
+        while factor != -1:
 
             # handles zeroes in front (i.e. ([0, 7], 1 --> [0, 8]))
             # total would use less nodes than originally given
@@ -534,18 +535,21 @@ class CircularList:
                 curr = curr.next
 
             else:
-                val = total // (10 ** factor)
-                total -= val*(10**factor)
-                factor -= 1
-                curr.value = val
-                curr = curr.next
+                if curr.value is not None:
+                    val = total // (10 ** factor)
+                    total -= val*(10**factor)
+                    factor -= 1
+                    curr.value = val
+                    curr = curr.next
 
-        # if there is a remaining total, factor will not be -1
-        while factor != -1:
-            add_val = total//(10 ** factor)
-            total -= add_val*(10**factor)
-            factor -= 1
-            self.add_back(add_val)
+                else:
+                    # if there is a remaining total, factor will not be -1
+                    add_val = total//(10 ** factor)
+                    total -= add_val*(10**factor)
+                    factor -= 1
+                    self.add_back(add_val)
+
+
 
 
 if __name__ == '__main__':
