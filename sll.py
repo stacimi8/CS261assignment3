@@ -293,6 +293,10 @@ class LinkedList:
         if size + start_index > self.length():
             raise SLLException
 
+        # invalid size - size is negative
+        if size < 0:
+            raise SLLException
+
         end_index = size + start_index - 1
 
         # created new LinkedList for slice
