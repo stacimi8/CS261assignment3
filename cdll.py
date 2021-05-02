@@ -510,7 +510,7 @@ class CircularList:
             factor -= 1
 
         # find the sum of the two integers
-        total = CDLL_integer + integer
+        total = CDLL_integer + num
 
         # finding total amount of nodes needed
         total_copy = total
