@@ -330,9 +330,11 @@ class CircularList:
                 index1 > self.length() - 1 or index2 > self.length() - 1:
             raise CDLLException
 
-        length = self.length()
+        if index1 <= index2:
+            length = index2 + 1
+        else:
+            length = index1 + 1
 
-        # finding index1 next and prev
         curr = self.sentinel.next
         for index in range(0, length):
 
@@ -443,8 +445,8 @@ class CircularList:
         value of the steps parameter can be very large (from -109 to 109). The solution’s
         runtime complexity must be O(N), where N is the length of the list.
         """
-
         pass
+
 
 
 
@@ -486,7 +488,63 @@ class CircularList:
         creating any new nodes. You are not allowed to change the values of the nodes; the
         solution must change node pointers. Your solution must have O(N) runtime complexity.
         """
-        pass
+
+        count = (self.length()-1)//2
+        prev_odd = self.sentinel.next
+        curr_even = prev_odd.next
+        curr_odd = curr_even.next
+
+        # accounts for an odd length array
+        while count != 0 and self.length() > 2 and self.length() % 2 != 0:
+            # defining next odd and next even for later use
+            next_odd = curr_odd.next.next
+            next_even = curr_even.next.next
+
+            # linking curr odd prev to prev odd and prev odd next to curr odd
+            curr_odd.prev = prev_odd
+            prev_odd.next = curr_odd
+
+            # updating previous odd
+            prev_odd = curr_odd
+
+            # linking curr even to back of self.sentinel and curr even prev to sentinel prev
+            curr_even.next = self.sentinel
+            curr_even.prev = self.sentinel.prev
+
+            self.sentinel.prev.next = curr_even
+            self.sentinel.prev = curr_even
+
+            # updating curr_even to next even node
+            curr_odd = next_odd
+            curr_even = next_even
+
+            count -= 1
+
+        # accounts for even length array (where to apply the remaining index)
+        while count != 0 and self.length() > 2 and self.length() % 2 == 0:
+            # defining next odd and next even for later use
+            next_odd = curr_odd.next.next
+            next_even = curr_even.next.next
+
+            # linking curr odd prev to prev odd and prev odd next to curr odd
+            curr_odd.prev = prev_odd
+            prev_odd.next = curr_odd
+
+            # updating previous odd
+            prev_odd = curr_odd
+
+            # linking curr even to back of self.sentinel prev and curr even prev to sentinel prev prev
+            curr_even.next = self.sentinel.prev
+            curr_even.prev = self.sentinel.prev.prev
+
+            self.sentinel.prev.prev.next = curr_even
+            self.sentinel.prev.prev = curr_even
+
+            # updating curr_even to next even node
+            curr_odd = next_odd
+            curr_even = next_even
+
+            count -= 1
 
     def add_integer(self, num: int) -> None:
         """Assume the content of the linked list represents a non-negative integer such that each
@@ -666,54 +724,54 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    print('\n# reverse example 1')
-    test_cases = (
-        [1, 2, 3, 3, 4, 5],
-        [1, 2, 3, 4, 5],
-        ['A', 'B', 'C', 'D']
-    )
-    for case in test_cases:
-        lst = CircularList(case)
-        lst.reverse()
-        print(lst)
-
-    print('\n# reverse example 2')
-    lst = CircularList()
-    print(lst)
-    lst.reverse()
-    print(lst)
-    lst.add_back(2)
-    lst.add_back(3)
-    lst.add_front(1)
-    lst.reverse()
-    print(lst)
-
-    print('\n# reverse example 3')
-
-
-    class Student:
-        def __init__(self, name, age):
-            self.name, self.age = name, age
-
-        def __eq__(self, other):
-            return self.age == other.age
-
-        def __str__(self):
-            return str(self.name) + ' ' + str(self.age)
-
-
-    s1, s2 = Student('John', 20), Student('Andy', 20)
-    lst = CircularList([s1, s2])
-    print(lst)
-    lst.reverse()
-    print(lst)
-    print(s1 == s2)
-
-    print('\n# reverse example 4')
-    lst = CircularList([1, 'A'])
-    lst.reverse()
-    print(lst)
-
+    # print('\n# reverse example 1')
+    # test_cases = (
+    #     [1, 2, 3, 3, 4, 5],
+    #     [1, 2, 3, 4, 5],
+    #     ['A', 'B', 'C', 'D']
+    # )
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     lst.reverse()
+    #     print(lst)
+    #
+    # print('\n# reverse example 2')
+    # lst = CircularList()
+    # print(lst)
+    # lst.reverse()
+    # print(lst)
+    # lst.add_back(2)
+    # lst.add_back(3)
+    # lst.add_front(1)
+    # lst.reverse()
+    # print(lst)
+    #
+    # print('\n# reverse example 3')
+    #
+    #
+    # class Student:
+    #     def __init__(self, name, age):
+    #         self.name, self.age = name, age
+    #
+    #     def __eq__(self, other):
+    #         return self.age == other.age
+    #
+    #     def __str__(self):
+    #         return str(self.name) + ' ' + str(self.age)
+    #
+    #
+    # s1, s2 = Student('John', 20), Student('Andy', 20)
+    # lst = CircularList([s1, s2])
+    # print(lst)
+    # lst.reverse()
+    # print(lst)
+    # print(s1 == s2)
+    #
+    # print('\n# reverse example 4')
+    # lst = CircularList([1, 'A'])
+    # lst.reverse()
+    # print(lst)
+    #
     # print('\n# sort example 1')
     # test_cases = (
     #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
@@ -760,19 +818,19 @@ if __name__ == '__main__':
     #     lst.remove_duplicates()
     #     print('OUTPUT:', lst)
     #
-    # print('\n# odd_even example 1')
-    # test_cases = (
-    #     [1, 2, 3, 4, 5], list('ABCDE'),
-    #     [], [100], [100, 200], [100, 200, 300],
-    #     [100, 200, 300, 400],
-    #     [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
-    # )
-    #
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     print('INPUT :', lst)
-    #     lst.odd_even()
-    #     print('OUTPUT:', lst)
+    print('\n# odd_even example 1')
+    test_cases = (
+        [1, 2, 3, 4, 5], list('ABCDE'),
+        [], [100], [100, 200], [100, 200, 300],
+        [100, 200, 300, 400],
+        [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
+    )
+
+    for case in test_cases:
+        lst = CircularList(case)
+        print('INPUT :', lst)
+        lst.odd_even()
+        print('OUTPUT:', lst)
     #
     # print('\n# add_integer example 1')
     # test_cases = (
