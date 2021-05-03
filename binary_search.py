@@ -3,6 +3,8 @@
 #             Linked Lists and Binary Search
 # Description: Implementation of two binary search methods.
 
+import random
+import time
 from static_array import *
 
 
@@ -11,20 +13,82 @@ from static_array import *
 
 def binary_search(arr: StaticArray, target: int) -> int:
     """
-    TODO: Write this implementation
+    A function that receives a StaticArray and an integer target and returns the index
+    of the target element if it is present in the array or returns -1 if it is not. The
+    original array should not be modified. You may assume that the input array will contain
+    at least one element and that all elements will be integers in the range [-109, 109].
+    It is guaranteed that all elements in the input array will be distinct and that the
+    input array will be sorted in either ascending or descending order. Your binary search
+    implementation must have O(logN) runtime complexity.
     """
-    pass
 
+    # help from CS162 - assignment 3 binary_search.py
+    first = 0
+    last = arr.size() - 1
+
+    # input array is stored in ascending order
+    if arr.get(first) <= arr.get(last):
+        while first <= last:
+            middle = (first + last) // 2
+            if arr.get(middle) == target:    # target value found
+                return middle    # returns index of found target value
+            if arr.get(middle) > target:
+                last = middle - 1
+            else:
+                first = middle + 1
+        return -1
+
+    # input array is sorted in descending order
+    if arr.get(first) > arr.get(last):
+        while first <= last:
+            middle = (first + last) // 2
+            if arr.get(middle) == target:    # target value found
+                return middle    # returns index of found target value
+            if arr.get(middle) > target:
+                first = middle + 1
+            else:
+                last = middle - 1
+        return -1
 
 # ------------------- PROBLEM 2 - -------------------------------------------
 
 
 def binary_search_rotated(arr: StaticArray, target: int) -> int:
     """
-    TODO: Write this implementation
+    A function that receives a StaticArray and an integer target and returns the index
+    of the target element if it is present in the array or returns -1 if it is not. The
+    original array should not be modified. You may assume that the input array will contain
+    at least one element and that all elements will be integers in the range [-109, 109].
+    It is guaranteed that all elements in the input array will be distinct. The input array
+    will be sorted in the ascending order. But, before being passed to your function, the input
+    array will be rotated an unknown number of steps (either right or left). Your binary
+    search implementation must have O(logN) runtime complexity.
     """
-    pass
 
+    # help from CS162 - assignment 3 binary_search.py
+    first = 0
+    last = arr.size() - 1
+
+    # if rotated, this will find the original last index in the rotated list
+    for index in range(0, arr.size() - 1):
+        if arr.get(index) > arr.get(index + 1):
+            last = index
+            if arr.get(first) <= target <= arr.get(last):
+                break
+            else:
+                first = last + 1
+                last = arr.size() - 1
+
+    while first <= last:
+        middle = (first + last) // 2
+        if arr.get(middle) == target:  # target value found
+            return middle  # returns index of found target value
+        if arr.get(middle) > target:
+            last = middle - 1
+        else:
+            first = middle + 1
+
+    return -1
 
 # ------------------- BASIC TESTING -----------------------------------------
 
@@ -32,18 +96,17 @@ def binary_search_rotated(arr: StaticArray, target: int) -> int:
 if __name__ == "__main__":
     pass
 
-    print('\n# problem 1 example 1')
-    src = (-10, -5, 0, 5, 7, 9, 11)
-    targets = (7, -10, 11, 0, 8, 1, -100, 100)
-    arr = StaticArray(len(src))
-    for i, value in enumerate(src):
-        arr[i] = value
-    print([binary_search(arr, target) for target in targets])
-    arr._data.reverse()
-    print([binary_search(arr, target) for target in targets])
-
-
-    print('\n# problem 1 example 2')
+    # print('\n# problem 1 example 1')
+    # src = (-10, -5, 0, 5, 7, 9, 11)
+    # targets = (7, -10, 11, 0, 8, 1, -100, 100)
+    # arr = StaticArray(len(src))
+    # for i, value in enumerate(src):
+    #     arr[i] = value
+    # print([binary_search(arr, target) for target in targets])
+    # arr._data.reverse()
+    # print([binary_search(arr, target) for target in targets])
+    #
+    # print('\n# problem 1 example 2')
     """
     src = [random.randint(-10 ** 7, 10 ** 7) for _ in range(5_000_000)]
     src = sorted(set(src))
@@ -90,7 +153,7 @@ if __name__ == "__main__":
 
 
     print('\n# problem 2 example 2')
-    """
+
     src = [random.randint(-10 ** 7, 10 ** 7) for _ in range(5_000_000)]
     src = sorted(set(src))
     arr = StaticArray(len(src))
@@ -112,4 +175,3 @@ if __name__ == "__main__":
         total_time += time.time()
         result &= arr[answer] == target if target in src else answer == -1
     print(result, total_time < 0.5)
-    """
