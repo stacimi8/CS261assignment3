@@ -468,10 +468,68 @@ class CircularList:
         value of the steps parameter can be very large (from -109 to 109). The solution’s
         runtime complexity must be O(N), where N is the length of the list.
         """
-        pass
 
+        if steps == 0:
+            return
 
+        if self.length() == 0 or self.length() == 1:
+            return
 
+        count = abs(steps) % self.length()
+
+        # the number of steps required does not actually change the node placements
+        if count == 0:
+            return
+
+        if steps < 0:
+            curr = self.sentinel
+            sentinel_next = self.sentinel.next
+            sentinel_prev = self.sentinel.prev
+            for index in range(0, self.length()):
+                if index == count:
+
+                    # linking sentinel to its new previous and next
+                    self.sentinel.prev = curr
+                    # accounting for if curr next node was originally self.sentinel
+                    if curr.next == self.sentinel:
+                        self.sentinel.next = curr.next.next
+                    else:
+                        self.sentinel.next = curr.next
+
+                    # linking new sentinel next and new sentinel prev to sentinel
+                    self.sentinel.next.prev = self.sentinel
+                    curr.next = self.sentinel
+
+                    # closing the gap from where sentinel originally moved from
+                    sentinel_next.prev = sentinel_prev
+                    sentinel_prev.next = sentinel_next
+                    break
+                curr = curr.next
+
+        if steps > 0:
+            curr = self.sentinel
+            sentinel_next = self.sentinel.next
+            sentinel_prev = self.sentinel.prev
+            for index in range(0, self.length()):
+                if index == count:
+
+                    # linking sentinel to its new next and previous
+                    self.sentinel.next = curr
+                    # accounting for if curr prev node was originally self.sentinel
+                    if curr.prev == self.sentinel:
+                        self.sentinel.prev = curr.prev.prev
+                    else:
+                        self.sentinel.prev = curr.prev
+
+                    # linking new sentinel previous and new sentinel next to sentinel
+                    self.sentinel.prev.next = self.sentinel
+                    curr.prev = self.sentinel
+
+                    # closing the gap from where sentinel originally moved from
+                    sentinel_next.prev = sentinel_prev
+                    sentinel_prev.next = sentinel_next
+                    break
+                curr = curr.prev
 
     def remove_duplicates(self) -> None:
         """
@@ -795,17 +853,17 @@ if __name__ == '__main__':
     # lst.reverse()
     # print(lst)
     #
-    print('\n# sort example 1')
-    test_cases = (
-        [1, 10, 2, 20, 3, 30, 4, 40, 5],
-        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-        [(1, 1), (20, 1), (1, 20), (2, 20)]
-    )
-    for case in test_cases:
-        lst = CircularList(case)
-        print(lst)
-        lst.sort()
-        print(lst)
+    # print('\n# sort example 1')
+    # test_cases = (
+    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
+    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+    #     [(1, 1), (20, 1), (1, 20), (2, 20)]
+    # )
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     print(lst)
+    #     lst.sort()
+    #     print(lst)
     #
     # print('\n# rotate example 1')
     # source = [_ for _ in range(-20, 20, 7)]
@@ -820,11 +878,11 @@ if __name__ == '__main__':
     #     for _ in range(3):
     #         lst.rotate(j)
     #         print(lst)
-    #
-    # print('\n# rotate example 3')
-    # lst = CircularList()
-    # lst.rotate(10)
-    # print(lst)
+
+    print('\n# rotate example 3')
+    lst = CircularList([])
+    lst.rotate(10)
+    print(lst)
     #
     # print('\n# remove_duplicates example 1')
     # test_cases = (
