@@ -365,7 +365,7 @@ class CircularList:
             index2_prev.next = index2_next
             index2_next.prev = index2_prev
 
-        if index1 - index2 == 1:  # index1 is after index2
+        elif index1 - index2 == 1:  # index1 is after index2
 
             # swapping two provided indices and linking them to each other
             index2_next.next = index1_prev
@@ -380,7 +380,7 @@ class CircularList:
             index1_next.prev = index1_prev
 
         # change pointers - if indices are not next to each other
-        if abs(index2 - index1) != 1:
+        elif abs(index2 - index1) != 1:
             # updating index1 next and prev pointers
             index1_node.next = index2_next
             index1_node.prev = index2_prev
@@ -433,7 +433,30 @@ class CircularList:
         of the same type (either all numbers, or strings, or custom objects, but never
         a mix of these).
         """
-        pass
+
+        # starting with number that is not 0 to start while loop
+        count = 1
+
+        while count != 0:
+            count = 0
+            curr = self.sentinel.next
+            curr_next = self.sentinel.next.next
+
+            for node in range(0, self.length()):
+                # breaking since the sentinel value NONE can't be compared
+                if curr == self.sentinel or curr_next == self.sentinel:
+                    break
+                curr_val = curr.value
+                next_val = curr_next.value
+
+                # swap places if current value (left side) is greater than the next node
+                if curr_val > next_val:
+                    self.swap_pairs(node, node + 1)
+                    count += 1
+                    curr_next = curr.next
+                else:
+                    curr = curr.next
+                    curr_next = curr.next
 
     def rotate(self, steps: int) -> None:
         """
@@ -772,17 +795,17 @@ if __name__ == '__main__':
     # lst.reverse()
     # print(lst)
     #
-    # print('\n# sort example 1')
-    # test_cases = (
-    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
-    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-    #     [(1, 1), (20, 1), (1, 20), (2, 20)]
-    # )
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     print(lst)
-    #     lst.sort()
-    #     print(lst)
+    print('\n# sort example 1')
+    test_cases = (
+        [1, 10, 2, 20, 3, 30, 4, 40, 5],
+        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+        [(1, 1), (20, 1), (1, 20), (2, 20)]
+    )
+    for case in test_cases:
+        lst = CircularList(case)
+        print(lst)
+        lst.sort()
+        print(lst)
     #
     # print('\n# rotate example 1')
     # source = [_ for _ in range(-20, 20, 7)]
@@ -818,19 +841,19 @@ if __name__ == '__main__':
     #     lst.remove_duplicates()
     #     print('OUTPUT:', lst)
     #
-    print('\n# odd_even example 1')
-    test_cases = (
-        [1, 2, 3, 4, 5], list('ABCDE'),
-        [], [100], [100, 200], [100, 200, 300],
-        [100, 200, 300, 400],
-        [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
-    )
-
-    for case in test_cases:
-        lst = CircularList(case)
-        print('INPUT :', lst)
-        lst.odd_even()
-        print('OUTPUT:', lst)
+    # print('\n# odd_even example 1')
+    # test_cases = (
+    #     [1, 2, 3, 4, 5], list('ABCDE'),
+    #     [], [100], [100, 200], [100, 200, 300],
+    #     [100, 200, 300, 400],
+    #     [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
+    # )
+    #
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     print('INPUT :', lst)
+    #     lst.odd_even()
+    #     print('OUTPUT:', lst)
     #
     # print('\n# add_integer example 1')
     # test_cases = (
