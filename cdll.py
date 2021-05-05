@@ -405,19 +405,20 @@ class CircularList:
         pointers. Your solution must have O(N) runtime complexity.
         """
 
-        midway = self.length()//2
-        count = midway
+        # start with self.sentinel as curr
+        curr = self.sentinel
 
-        # assigning index 1 and index 2 to use with swap_pairs method
-        index_1 = 0
-        index_2 = self.length() - 1
+        # iterate through the list swapping next and previous pointer for each node
+        for node in range(-1, self.length()):
 
-        # swapping the first half of the list with its mirror image on the second half of the list
-        while count != 0:
-            self.swap_pairs(index_1, index_2)
-            index_1 += 1
-            index_2 -= 1
-            count -= 1
+            # variable to hold curr.next node
+            original_next = curr.next
+
+            # swapping curr next with curr prev to reverse list
+            curr.next = curr.prev
+            curr.prev = original_next
+
+            curr = curr.next
 
     def sort(self) -> None:
         """
@@ -805,53 +806,53 @@ if __name__ == '__main__':
     #     except Exception as e:
     #         print(type(e))
     #
-    # print('\n# reverse example 1')
-    # test_cases = (
-    #     [1, 2, 3, 3, 4, 5],
-    #     [1, 2, 3, 4, 5],
-    #     ['A', 'B', 'C', 'D']
-    # )
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     lst.reverse()
-    #     print(lst)
-    #
-    # print('\n# reverse example 2')
-    # lst = CircularList()
-    # print(lst)
-    # lst.reverse()
-    # print(lst)
-    # lst.add_back(2)
-    # lst.add_back(3)
-    # lst.add_front(1)
-    # lst.reverse()
-    # print(lst)
-    #
-    # print('\n# reverse example 3')
-    #
-    #
-    # class Student:
-    #     def __init__(self, name, age):
-    #         self.name, self.age = name, age
-    #
-    #     def __eq__(self, other):
-    #         return self.age == other.age
-    #
-    #     def __str__(self):
-    #         return str(self.name) + ' ' + str(self.age)
-    #
-    #
-    # s1, s2 = Student('John', 20), Student('Andy', 20)
-    # lst = CircularList([s1, s2])
-    # print(lst)
-    # lst.reverse()
-    # print(lst)
-    # print(s1 == s2)
-    #
-    # print('\n# reverse example 4')
-    # lst = CircularList([1, 'A'])
-    # lst.reverse()
-    # print(lst)
+    print('\n# reverse example 1')
+    test_cases = (
+        [1, 2, 3, 3, 4, 5],
+        [1, 2, 3, 4, 5],
+        ['A', 'B', 'C', 'D']
+    )
+    for case in test_cases:
+        lst = CircularList(case)
+        lst.reverse()
+        print(lst)
+
+    print('\n# reverse example 2')
+    lst = CircularList()
+    print(lst)
+    lst.reverse()
+    print(lst)
+    lst.add_back(2)
+    lst.add_back(3)
+    lst.add_front(1)
+    lst.reverse()
+    print(lst)
+
+    print('\n# reverse example 3')
+
+
+    class Student:
+        def __init__(self, name, age):
+            self.name, self.age = name, age
+
+        def __eq__(self, other):
+            return self.age == other.age
+
+        def __str__(self):
+            return str(self.name) + ' ' + str(self.age)
+
+
+    s1, s2 = Student('John', 20), Student('Andy', 20)
+    lst = CircularList([s1, s2])
+    print(lst)
+    lst.reverse()
+    print(lst)
+    print(s1 == s2)
+
+    print('\n# reverse example 4')
+    lst = CircularList([1, 'A'])
+    lst.reverse()
+    print(lst)
     #
     # print('\n# sort example 1')
     # test_cases = (
@@ -878,11 +879,11 @@ if __name__ == '__main__':
     #     for _ in range(3):
     #         lst.rotate(j)
     #         print(lst)
-
-    print('\n# rotate example 3')
-    lst = CircularList([])
-    lst.rotate(10)
-    print(lst)
+    #
+    # print('\n# rotate example 3')
+    # lst = CircularList([])
+    # lst.rotate(10)
+    # print(lst)
     #
     # print('\n# remove_duplicates example 1')
     # test_cases = (
