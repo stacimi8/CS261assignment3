@@ -574,13 +574,16 @@ class CircularList:
         solution must change node pointers. Your solution must have O(N) runtime complexity.
         """
 
+        if self.length() <= 1:
+            return
+
         # curr is even nodes
         curr = self.sentinel.next.next
         odd = curr.next
         count = (self.length()-1)//2
         first_even_node = curr
 
-        while count != 0 and self.length() > 1:
+        while count != 0:
 
             # place holder for next even curr
             next_even = odd.next
@@ -597,7 +600,7 @@ class CircularList:
             curr = next_even
             odd = curr.next
 
-            if odd is first_even_node and self.length() > 2:
+            if odd is first_even_node:
 
                 # linking last odd node and first even node to each other
                 next_even.prev.next = odd
