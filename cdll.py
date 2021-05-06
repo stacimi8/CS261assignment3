@@ -574,60 +574,42 @@ class CircularList:
         solution must change node pointers. Your solution must have O(N) runtime complexity.
         """
 
+        # curr is even nodes
+        curr = self.sentinel.next.next
+        odd = curr.next
         count = (self.length()-1)//2
-        prev_odd = self.sentinel.next
-        curr_even = prev_odd.next
-        curr_odd = curr_even.next
+        first_even_node = curr
 
-        # accounts for an odd length array
-        while count != 0 and self.length() > 2 and self.length() % 2 != 0:
-            # defining next odd and next even for later use
-            next_odd = curr_odd.next.next
-            next_even = curr_even.next.next
+        while count != 0 and self.length() > 1:
 
-            # linking curr odd prev to prev odd and prev odd next to curr odd
-            curr_odd.prev = prev_odd
-            prev_odd.next = curr_odd
+            # place holder for next even curr
+            next_even = odd.next
 
-            # updating previous odd
-            prev_odd = curr_odd
+            curr.prev.next = odd
+            odd.prev = curr.prev
 
-            # linking curr even to back of self.sentinel and curr even prev to sentinel prev
-            curr_even.next = self.sentinel
-            curr_even.prev = self.sentinel.prev
+            self.sentinel.prev.next = curr
+            curr.prev = self.sentinel.prev
 
-            self.sentinel.prev.next = curr_even
-            self.sentinel.prev = curr_even
+            self.sentinel.prev = curr
+            curr.next = self.sentinel
 
-            # updating curr_even to next even node
-            curr_odd = next_odd
-            curr_even = next_even
+            curr = next_even
+            odd = curr.next
 
-            count -= 1
+            if odd is first_even_node and self.length() > 2:
 
-        # accounts for even length array (where to apply the remaining index)
-        while count != 0 and self.length() > 2 and self.length() % 2 == 0:
-            # defining next odd and next even for later use
-            next_odd = curr_odd.next.next
-            next_even = curr_even.next.next
+                # linking last odd node and first even node to each other
+                next_even.prev.next = odd
+                odd.prev = next_even.prev
 
-            # linking curr odd prev to prev odd and prev odd next to curr odd
-            curr_odd.prev = prev_odd
-            prev_odd.next = curr_odd
+                # linking next_even (last even node) and prior even node to each other
+                self.sentinel.prev.next = next_even
+                next_even.prev = self.sentinel.prev
 
-            # updating previous odd
-            prev_odd = curr_odd
-
-            # linking curr even to back of self.sentinel prev and curr even prev to sentinel prev prev
-            curr_even.next = self.sentinel.prev
-            curr_even.prev = self.sentinel.prev.prev
-
-            self.sentinel.prev.prev.next = curr_even
-            self.sentinel.prev.prev = curr_even
-
-            # updating curr_even to next even node
-            curr_odd = next_odd
-            curr_even = next_even
+                # linking next_even (last even node) and self.sentinel to each other
+                self.sentinel.prev = next_even
+                next_even.next = self.sentinel
 
             count -= 1
 
@@ -857,17 +839,17 @@ if __name__ == '__main__':
     # lst.reverse()
     # print(lst)
     #
-    print('\n# sort example 1')
-    test_cases = (
-        [1, 10, 2, 20, 3, 30, 4, 40, 5],
-        ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
-        [(1, 1), (20, 1), (1, 20), (2, 20)]
-    )
-    for case in test_cases:
-        lst = CircularList(case)
-        print(lst)
-        lst.sort()
-        print(lst)
+    # print('\n# sort example 1')
+    # test_cases = (
+    #     [1, 10, 2, 20, 3, 30, 4, 40, 5],
+    #     ['zebra2', 'apple', 'tomato', 'apple', 'zebra1'],
+    #     [(1, 1), (20, 1), (1, 20), (2, 20)]
+    # )
+    # for case in test_cases:
+    #     lst = CircularList(case)
+    #     print(lst)
+    #     lst.sort()
+    #     print(lst)
     #
     # print('\n# rotate example 1')
     # source = [_ for _ in range(-20, 20, 7)]
@@ -903,19 +885,19 @@ if __name__ == '__main__':
     #     lst.remove_duplicates()
     #     print('OUTPUT:', lst)
     #
-    # print('\n# odd_even example 1')
-    # test_cases = (
-    #     [1, 2, 3, 4, 5], list('ABCDE'),
-    #     [], [100], [100, 200], [100, 200, 300],
-    #     [100, 200, 300, 400],
-    #     [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
-    # )
-    #
-    # for case in test_cases:
-    #     lst = CircularList(case)
-    #     print('INPUT :', lst)
-    #     lst.odd_even()
-    #     print('OUTPUT:', lst)
+    print('\n# odd_even example 1')
+    test_cases = (
+        [1, 2, 3, 4, 5], list('ABCDE'),
+        [], [100], [100, 200], [100, 200, 300],
+        [100, 200, 300, 400],
+        [10, 'A', 20, 'B', 30, 'C', 40, 'D', 50, 'E']
+    )
+
+    for case in test_cases:
+        lst = CircularList(case)
+        print('INPUT :', lst)
+        lst.odd_even()
+        print('OUTPUT:', lst)
     #
     # print('\n# add_integer example 1')
     # test_cases = (
