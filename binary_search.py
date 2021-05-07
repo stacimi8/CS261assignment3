@@ -99,7 +99,7 @@ def binary_search_rotated(arr: StaticArray, target: int) -> int:
 
     # check last value (since the while loop breaks if first == last)
     if arr.get(last) == target:
-        return middle
+        return (length - 1)
 
     return - 1
 
