@@ -98,7 +98,7 @@ def binary_search_rotated(arr: StaticArray, target: int) -> int:
                 last = middle
 
     # check last value (since the while loop breaks if first == last)
-    if arr.get(last) == target:
+    if arr.get(length-1) == target:
         return (length - 1)
 
     return - 1
@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     print('\n# problem 2 example 1')
     test_cases = (
-        ((6, 8, 12, 20, 0, 2, 5), 0),
+        ((935981732, 567475463), 567475463),
         ((6, 8, 12, 20, 0, 2, 5), -1),
         ((1,), 1),
         ((1,), 0),

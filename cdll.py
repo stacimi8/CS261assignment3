@@ -677,7 +677,7 @@ class CircularList:
                 else:
                     curr.prev.value += 1
                     curr = curr.prev
-            if curr.value <= 10:
+            if curr.value < 10:
                 curr = curr.prev
 
 
@@ -902,8 +902,8 @@ if __name__ == '__main__':
     #
     print('\n# add_integer example 1')
     test_cases = (
-        ([9, 4, 0, 7, 6, 4, 0], 836857),
-        ([], 25),
+        ([4, 9, 9, 7, 3, 3, 9, 8, 2, 3], 8951197),
+        ([], 25)
     )
     for list_content, integer in test_cases:
         lst = CircularList(list_content)
