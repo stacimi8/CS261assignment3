@@ -66,29 +66,37 @@ def binary_search_rotated(arr: StaticArray, target: int) -> int:
     """
 
     # help from CS162 - assignment 3 binary_search.py
+
+    length = arr.size()
+
+    # base case: size of array is 1
+    if length == 1:
+        if arr.get(0) == target:
+            return 0
+
     first = 0
-    last = arr.size() - 1
+    last = length - 1
 
-    # if rotated, this will find the original last index in the rotated list
-    for index in range(0, arr.size() - 1):
-        if arr.get(index) > arr.get(index + 1):
-            last = index
-            if arr.get(first) <= target <= arr.get(last):
-                break
-            else:
-                first = last + 1
-                last = arr.size() - 1
+    while first < last:
 
-    while first <= last:
         middle = (first + last) // 2
-        if arr.get(middle) == target:  # target value found
-            return middle  # returns index of found target value
-        if arr.get(middle) > target:
-            last = middle - 1
-        else:
-            first = middle + 1
 
-    return -1
+        if arr.get(middle) == target:    # target value found
+            return middle    # returns index of found target value
+
+        if arr.get(first) < arr.get(middle):
+            # sorted in ascending order
+            if arr.get(first) <= target < arr.get(middle):
+                last = middle
+            else:
+                first = middle + 1
+        else:
+            # sorted in ascending order
+            if arr.get(middle) < target <= arr.get(last):
+                first = middle + 1
+            else:
+                last = middle
+    return - 1
 
 # ------------------- BASIC TESTING -----------------------------------------
 
