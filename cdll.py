@@ -668,6 +668,15 @@ class CircularList:
                 remaining_digit = int(digit)
                 self.add_front(remaining_digit)
 
+        # there are more nodes than digits and curr value is 10
+        while curr is not self.sentinel:
+            if curr.value >= 10:
+                curr.value = curr.value % 10
+                curr.prev.value += 1
+                curr = curr.prev
+            if curr.value <= 10:
+                curr = curr.prev
+
 
 if __name__ == '__main__':
     pass
@@ -890,10 +899,8 @@ if __name__ == '__main__':
     #
     print('\n# add_integer example 1')
     test_cases = (
-        ([1, 2, 3], 10456),
+        ([5, 9, 6, 8, 0, 9, 3, 4, 1], 3947627),
         ([], 25),
-        ([2, 0, 9, 0, 7], 108),
-        ([9, 9, 9], 9_999_999)
     )
     for list_content, integer in test_cases:
         lst = CircularList(list_content)
