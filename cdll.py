@@ -672,8 +672,11 @@ class CircularList:
         while curr is not self.sentinel:
             if curr.value >= 10:
                 curr.value = curr.value % 10
-                curr.prev.value += 1
-                curr = curr.prev
+                if curr.prev is self.sentinel:
+                    self.add_front(1)
+                else:
+                    curr.prev.value += 1
+                    curr = curr.prev
             if curr.value <= 10:
                 curr = curr.prev
 
@@ -899,7 +902,7 @@ if __name__ == '__main__':
     #
     print('\n# add_integer example 1')
     test_cases = (
-        ([5, 9, 6, 8, 0, 9, 3, 4, 1], 3947627),
+        ([9, 4, 0, 7, 6, 4, 0], 836857),
         ([], 25),
     )
     for list_content, integer in test_cases:
