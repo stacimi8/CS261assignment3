@@ -96,6 +96,11 @@ def binary_search_rotated(arr: StaticArray, target: int) -> int:
                 first = middle + 1
             else:
                 last = middle
+
+    # check last value (since the while loop breaks if first == last)
+    if arr.get(last) == target:
+        return middle
+
     return - 1
 
 # ------------------- BASIC TESTING -----------------------------------------
@@ -160,26 +165,26 @@ if __name__ == "__main__":
     print(*result)
 
 
-    print('\n# problem 2 example 2')
-
-    src = [random.randint(-10 ** 7, 10 ** 7) for _ in range(5_000_000)]
-    src = sorted(set(src))
-    arr = StaticArray(len(src))
-    arr._data = src[:]
-
-    # add 20 valid and 20 (likely) invalid targets
-    targets = [-10 ** 8, 10 ** 8]
-    targets += [arr[random.randint(0, len(src) - 1)] for _ in range(20)]
-    targets += [random.randint(-10 ** 7, 10 ** 7) for _ in range(18)]
-
-    result, total_time = True, 0
-    for target in targets:
-        # rotate arr random number of steps
-        pivot = random.randint(0, len(src) - 1)
-        arr._data = src[pivot:] + src[:pivot]
-
-        total_time -= time.time()
-        answer = binary_search_rotated(arr, target)
-        total_time += time.time()
-        result &= arr[answer] == target if target in src else answer == -1
-    print(result, total_time < 0.5)
+    # print('\n# problem 2 example 2')
+    #
+    # src = [random.randint(-10 ** 7, 10 ** 7) for _ in range(5_000_000)]
+    # src = sorted(set(src))
+    # arr = StaticArray(len(src))
+    # arr._data = src[:]
+    #
+    # # add 20 valid and 20 (likely) invalid targets
+    # targets = [-10 ** 8, 10 ** 8]
+    # targets += [arr[random.randint(0, len(src) - 1)] for _ in range(20)]
+    # targets += [random.randint(-10 ** 7, 10 ** 7) for _ in range(18)]
+    #
+    # result, total_time = True, 0
+    # for target in targets:
+    #     # rotate arr random number of steps
+    #     pivot = random.randint(0, len(src) - 1)
+    #     arr._data = src[pivot:] + src[:pivot]
+    #
+    #     total_time -= time.time()
+    #     answer = binary_search_rotated(arr, target)
+    #     total_time += time.time()
+    #     result &= arr[answer] == target if target in src else answer == -1
+    # print(result, total_time < 0.5)
